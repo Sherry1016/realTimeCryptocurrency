@@ -12,6 +12,7 @@ import org.springframework.util.StopWatch;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
@@ -81,7 +82,7 @@ public class KlineDataDao {
                 ps.setDouble(3, data.getHighPrice());
                 ps.setDouble(4, data.getLowPrice());
                 ps.setDouble(5, data.getClosePrice());
-                ps.setLong(6, data.getVolume());
+                ps.setDouble(6, data.getVolume());
                 ps.setString(7, data.getCloseTime());
                 ps.setObject(8, data.getUuid());
             }

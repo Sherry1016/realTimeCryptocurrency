@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -29,7 +29,8 @@ public class KlineDataServiceImpl implements KlineDataService {
     @Value("${url}")
     private String urlTemplate;
 
-    private KlineDataRaw create(String[] dataRow){
+    // todo test this function
+    public KlineDataRaw create(String[] dataRow){
         return new KlineDataRaw()
                 .setOpenTime(Long.parseLong(dataRow[0]))
                 .setOpenPrice(dataRow[1])
@@ -53,12 +54,6 @@ public class KlineDataServiceImpl implements KlineDataService {
                 = restTemplate.getForEntity(url, String[][].class);
         String[][] body = response.getBody();
 
-        // todo
-        //  upload to github
-
-
-        // todo
-        //  再建一个class存Kline data 把klinedataRaw 一个一个转换 to database
         assert body != null;
         List<KlineDataRaw> rawData = Arrays.stream(body).parallel()
                 .map(dataRow -> create(dataRow))
@@ -68,10 +63,10 @@ public class KlineDataServiceImpl implements KlineDataService {
         //dao.insert(data);
         dao.batchInsert(rawData);
 
-        List<KlineData> klineDataList = new ArrayList<>();
-        for (KlineDataRaw i : rawData){
-            klineDataList.add(transform.transformation(i));
-        }
+
+        List<KlineData> klineDataList = rawData.stream()
+                .map(data -> transform.transformation(data))
+                .collect(Collectors.toList());
 
         dao.batchInsertKlineData(klineDataList);
 

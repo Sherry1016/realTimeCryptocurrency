@@ -1,26 +1,33 @@
 package com.example.Cryptocurrency.service;
 
 
-import com.example.Cryptocurrency.dao.KlineDataDao;
 import com.example.Cryptocurrency.model.KlineData;
 import com.example.Cryptocurrency.model.KlineDataRaw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.sql.Date;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+
 @Service
 public class TransformationService {
+    @Autowired
+    private Format timeFormat;
 
-    public KlineData transformation(KlineDataRaw rawData){
-        KlineData klineData = new KlineData();
-        klineData.setOpenTime(rawData.getOpenTime().toString());
-        klineData.setOpenPrice(Double.parseDouble(rawData.getOpenPrice()));
-        klineData.setHighPrice(Double.parseDouble(rawData.getHighPrice()));
-        klineData.setLowPrice(Double.parseDouble(rawData.getLowPrice()));
-        klineData.setClosePrice(Double.parseDouble(rawData.getClosePrice()));
-        klineData.setVolume(Long.parseLong(rawData.getVolume()));
-        klineData.setCloseTime(rawData.getCloseTime().toString());
-        klineData.setUuid(rawData.getUuid());
-        return klineData;
+    // todo test this function
+    public KlineData transformation(@NotNull @Valid KlineDataRaw rawData){
+        return new KlineData()
+                .setOpenTime(timeFormat.format(new Date(rawData.getOpenTime())))
+                .setOpenPrice(Double.parseDouble(rawData.getOpenPrice()))
+                .setHighPrice(Double.parseDouble(rawData.getHighPrice()))
+                .setLowPrice(Double.parseDouble(rawData.getLowPrice()))
+                .setClosePrice(Double.parseDouble(rawData.getClosePrice()))
+                .setVolume(Double.parseDouble(rawData.getVolume()))
+                .setCloseTime(timeFormat.format(new Date(rawData.getCloseTime())))
+                .setUuid(rawData.getUuid());
     }
 
 }

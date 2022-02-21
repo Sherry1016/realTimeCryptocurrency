@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.Min;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @Setter
 public class KlineData {
     @NotNull
-    private String openTime; // todo: fix error, time converter
+    private String openTime;
     @NotBlank
     private Double openPrice;
     @NotBlank
@@ -24,9 +24,9 @@ public class KlineData {
     @NotBlank
     private Double closePrice;
     @NotBlank
-    private Long volume; // todo:
+    private Double volume;
     @NotNull
-    private String closeTime; // todo: fix error, time converter, create bean, simpleDataFormat
+    private String closeTime;
     @NotNull
     private UUID uuid;
 }

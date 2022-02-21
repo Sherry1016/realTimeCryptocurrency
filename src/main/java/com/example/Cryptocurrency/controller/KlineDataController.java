@@ -16,4 +16,6 @@ public class KlineDataController {
 
         return service.klineData(symbol, interval, startTime, endTime);
     }
+
 }
+
